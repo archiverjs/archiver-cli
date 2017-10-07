@@ -1,0 +1,51 @@
+{
+  "name": "archiver-cli",
+  "version": "0.1.0",
+  "description": "a command line interface for archiverjs",
+  "homepage": "https://github.com/archiverjs/archiver-cli",
+  "author": {
+    "name": "Chris Talkington",
+    "url": "http://christalkington.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/archiverjs/archiver-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/archiverjs/archiver-cli/issues"
+  },
+  "license": "MIT",
+  "bin": {
+    "archiverjs": "cli.js"
+  },
+  "files": [
+    "cli.js"
+  ],
+  "engines": {
+    "node": ">= 4"
+  },
+  "scripts": {
+    "test": "mocha --reporter dot"
+  },
+  "dependencies": {
+	"archiver": "^2.0.0",
+    "get-stdin": "^5.0.1",
+    "meow": "^3.6.0",
+    "ora": "^0.2.1",
+    "plur": "^2.1.2"
+  },
+  "devDependencies": {
+    "mocha": "^3.1.1"
+  },
+  "keywords": [
+    "archive",
+    "archiver",
+    "stream",
+    "zip",
+    "tar",
+    "cli"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  }
+}
