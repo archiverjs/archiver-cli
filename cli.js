@@ -69,6 +69,12 @@ const run = function(input, opts) {
 
 	var output = fs.createWriteStream(opts.outFile);
 	archive = archiver(opts.archiveFormat, archiveOptions);
+
+	archive.on('error', function(err) {
+		spinner.stop();
+	  throw err;
+	});
+
 	archive.pipe(output);
 
 	input.push('!' + opts.outFile);
