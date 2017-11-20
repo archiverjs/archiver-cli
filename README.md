@@ -16,4 +16,4 @@ $ archiverjs --help
 
 ## Related
 
-- [archiver](https://github.com/archiver/node-archiver) - API for this module
+- [archiver](https://github.com/archiverjs/node-archiver) - API for this module
