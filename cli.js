@@ -9,7 +9,8 @@ const globby = require('globby');
 const meow = require('meow');
 const ora = require('ora');
 
-const cli = meow(`
+const cli = meow({
+      help: `
 	Usage
 	  $ archiverjs <path|glob> --out-file=output.zip [--format=zip|tar|json]
 
@@ -27,7 +28,9 @@ const cli = meow(`
 
 	Examples
 	  $ archiverjs images/* --out-file=images.zip
-`, {
+`,
+        autoVersion: process.argv.indexOf('--no-auto-version') === -1,
+	autoHelp: process.argv.indexOf('--no-auto-help') === -1,
         flags: {
                 archiveFormat: {
                 type: 'string',
