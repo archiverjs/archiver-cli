@@ -28,19 +28,21 @@ const cli = meow(`
 	Examples
 	  $ archiverjs images/* --out-file=images.zip
 `, {
-	string: [
-		'archive-format',
-		'compression-method',
-		'out-file'
-	],
-	alias: {
-		f: 'archive-format',
-		o: 'out-file',
-		Z: 'compression-method'
-	},
-	default: {
-		f: 'zip'
-	}
+        flags: {
+                archiveFormat: {
+                type: 'string',
+                alias: 'f',
+                default: 'zip'
+                },
+                compressionMethod: {
+                type: 'string',
+                alias: 'Z'
+                }
+                outFile: {
+                type: 'string',
+                alias: 'o'
+                }
+        }
 });
 
 var archive;
