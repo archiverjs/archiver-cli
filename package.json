@@ -22,20 +22,21 @@
     "cli.js"
   ],
   "engines": {
-    "node": ">= 6"
+    "node": ">= 8"
   },
   "scripts": {
-    "test": "mocha --reporter dot"
+    "test": "ava"
   },
   "dependencies": {
     "archiver": "^3.1.0",
-    "get-stdin": "^5.0.1",
+    "get-stdin": "^6.0.0",
     "globby": "^9.2.0",
     "meow": "^5.0.0",
     "ora": "^3.4.0"
   },
   "devDependencies": {
-    "mocha": "^6.2.0"
+    "ava": "^2.1.0",
+    "execa": "^2.0.1"
   },
   "keywords": [
     "archive",
