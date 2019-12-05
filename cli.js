@@ -81,7 +81,7 @@ const run = function(input, opts) {
 
 	input.push('!' + opts.outFile);
 
-	globby(input, {nodir: true})
+	globby(input, {onlyFiles: true})
 		.then(function(paths) {
 			return Promise.all(paths.map(function(filepath) {
 				return handleFile(filepath);
