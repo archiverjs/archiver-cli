@@ -10,42 +10,42 @@ const meow = require('meow');
 const ora = require('ora');
 
 const cli = meow({
-      help: `
-	Usage
-	  $ archiverjs <path|glob> --out-file=output.zip [--format=zip|tar|json]
+	help: `
+		Usage
+		$ archiverjs <path|glob> --out-file=output.zip [--format=zip|tar|json] [--compression-method=deflate|store]
 
-	Options
-		-f, --archive-format Set the archive format.
-			Archive format can be set to:
-				tar - just your everyday tarball
-				zip - This is the default format.
-				json - great for debugging
-		-o, --out-file Output file
-	  -Z, --compression-method Set the default compression method. Currently the main methods supported by zip are store and deflate.
-	  	Compression method can be set to:
-				store - Setting the compression method to store forces zip to store entries with no compression.
-				deflate - This is the default method for zip.
-
-	Examples
-	  $ archiverjs images/* --out-file=images.zip
-`,
-        autoVersion: process.argv.indexOf('--no-auto-version') === -1,
+		Options
+			-f, --archive-format Set the archive format.
+				Archive format can be set to:
+					zip - This is the default format
+					tar - just your everyday tarball
+					json - great for debugging
+			-o, --out-file Output file
+			-Z, --compression-method Set the default compression method. Currently the main methods supported by zip are store and deflate.
+				Compression method can be set to:
+					deflate - This is the default method for zip
+					store - Setting the compression method to store forces zip to store entries with no compression
+						
+		Examples
+		$ archiverjs images/* --out-file=images.zip
+	`,
+	autoVersion: process.argv.indexOf('--no-auto-version') === -1,
 	autoHelp: process.argv.indexOf('--no-auto-help') === -1,
-        flags: {
-                archiveFormat: {
-                type: 'string',
-                alias: 'f',
-                default: 'zip'
-                },
-                compressionMethod: {
-                type: 'string',
-                alias: 'Z'
-                }
-                outFile: {
-                type: 'string',
-                alias: 'o'
-                }
-        }
+	flags: {
+		archiveFormat: {
+			type: 'string',
+			alias: 'f',
+			default: 'zip'
+		},
+		compressionMethod: {
+			type: 'string',
+			alias: 'Z'
+		},
+		outFile: {
+			type: 'string',
+			alias: 'o'
+		}
+	}
 });
 
 var archive;

@@ -29,14 +29,14 @@
   },
   "dependencies": {
     "archiver": "^3.1.0",
-    "get-stdin": "^6.0.0",
-    "globby": "^9.2.0",
+    "get-stdin": "^7.0.0",
+    "globby": "^10.0.0",
     "meow": "^5.0.0",
-    "ora": "^3.4.0"
+    "ora": "^4.0.0"
   },
   "devDependencies": {
     "ava": "^2.1.0",
-    "execa": "^2.0.1"
+    "execa": "^3.4.0"
   },
   "keywords": [
     "archive",
