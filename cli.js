@@ -1,16 +1,14 @@
 #!/usr/bin/env node
-'use strict';
-const fs = require('fs');
-const path = require('path');
-
-const archiver = require('archiver');
-const getStdin = require('get-stdin');
-const globby = require('globby');
-const meow = require('meow');
-const ora = require('ora');
+"use strict";
+const fs = require("fs");
+const archiver = require("archiver");
+const getStdin = require("get-stdin");
+const globby = require("globby");
+const meow = require("meow");
+const ora = require("ora");
 
 const cli = meow({
-	help: `
+  help: `
 		Usage
 		$ archiverjs <path|glob> --out-file=output.zip [--format=zip|tar|json] [--compression-method=deflate|store]
 
@@ -28,90 +26,77 @@ const cli = meow({
 						
 		Examples
 		$ archiverjs images/* --out-file=images.zip
-	`,
-	autoVersion: process.argv.indexOf('--no-auto-version') === -1,
-	autoHelp: process.argv.indexOf('--no-auto-help') === -1,
-	flags: {
-		archiveFormat: {
-			type: 'string',
-			alias: 'f',
-			default: 'zip'
-		},
-		compressionMethod: {
-			type: 'string',
-			alias: 'Z'
-		},
-		outFile: {
-			type: 'string',
-			alias: 'o'
-		}
-	}
+  `,
+  input: [],
+  flags: {
+    archiveFormat: {
+      type: "string",
+      alias: "f",
+      default: "zip",
+    },
+    compressionMethod: {
+      type: "string",
+      alias: "Z",
+      default: "deflate",
+    },
+    outFile: {
+      type: "string",
+      alias: "o",
+      isRequired: true,
+    },
+  },
 });
 
-var archive;
-var archiveOptions = {};
+const run = function (input) {
+  const spinner = ora("Archiving");
+  spinner.start();
 
-const handleFile = function(input, opts) {
-	archive.file(input);
-	return Promise.resolve();
+  const output = fs.createWriteStream(cli.flags.outFile);
+  const archive = archiver(cli.flags.archiveFormat, {
+    store: cli.flags.compressionMethod === "store",
+  });
+
+  archive.on("error", function (err) {
+    spinner.stop();
+    throw err;
+  });
+
+  archive.pipe(output);
+
+  if (Buffer.isBuffer(input)) {
+    archive.append(input, {
+      name: "input.txt",
+    });
+  } else {
+    input.forEach(function (path) {
+      archive.file(path);
+    });
+  }
+
+  archive
+    .finalize()
+    .then(function () {
+      spinner.stop();
+      console.log(`Archive completed`);
+    })
+    .catch(function (err) {
+      spinner.stop();
+      throw err;
+    });
 };
 
-const run = function(input, opts) {
-	opts = Object.assign({ compressionMethod: 'deflate' }, opts);
-	const spinner = ora('Archiving');
+if (Array.isArray(cli.input) && cli.input.length > 0) {
+  globby(cli.input, { onlyFiles: true, ignore: [cli.flags.outFile] }).then(
+    function (paths) {
+      if (paths.length === 0) {
+        throw new Error('No files matched: "' + cli.input.join(", ") + '"');
+      }
 
-	if (Buffer.isBuffer(input)) {
-		return;
-	}
-
-	if (opts.outFile) {
-		spinner.start();
-	}
-
-	if (opts.compressionMethod === 'store') {
-		archiveOptions.store = true;
-	}
-
-	var output = fs.createWriteStream(opts.outFile);
-	archive = archiver(opts.archiveFormat, archiveOptions);
-
-	archive.on('error', function(err) {
-		spinner.stop();
-	  throw err;
-	});
-
-	archive.pipe(output);
-
-	input.push('!' + opts.outFile);
-
-	globby(input, {onlyFiles: true})
-		.then(function(paths) {
-			return Promise.all(paths.map(function(filepath) {
-				return handleFile(filepath);
-			}));
-		})
-		.then(function() {
-			return archive.finalize();
-		})
-		.then(function() {
-			spinner.stop();
-			console.log(`Archive completed`);
-		})
-		.catch(function(err) {
-			spinner.stop();
-			throw err;
-		});
-};
-
-if (!cli.input.length && process.stdin.isTTY) {
-	console.error('Specify at least one filename');
-	process.exit(1);
-}
-
-if (cli.input.length) {
-	run(cli.input, cli.flags);
+      run(paths);
+    }
+  );
 } else {
-	getStdin.buffer().then(function(buf) {
-		return run(buf, cli.flags);
-	});
+  getStdin.buffer().then(function (buf) {
+    run(buf);
+  });
 }
